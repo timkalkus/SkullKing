@@ -1,6 +1,8 @@
 from player import Player
 import random
 import math
+
+
 class Game():
     def __init__(self,player_count=2):
         self.players = [Player() for i in range(player_count)]
