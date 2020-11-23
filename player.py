@@ -6,8 +6,14 @@ class Player():
         # print('TODO')
     def set_hand(self,cards):
         self.cards = cards
+        self.cards_temp = cards
+        self.wins = 0
     def get_prediction(self):
         return random.randint(0,len(self.cards))
+    def add_win(self):
+        self.wins = self.wins + 1
+    def get_win(self):
+        return self.wins
     def turn(self,color=-1):
         allowed_cards=[]
         if color !=-1:

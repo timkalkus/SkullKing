@@ -52,23 +52,28 @@ class Game():
         prediction = []
         result = [0 for i in range(len(self.players))]
         for player in self.players:
-            player.set_hand(self.cards[:num])
-            self.cards = self.cards[num:]
+            player.set_hand(self.cards[:num+1])
+            self.cards = self.cards[num+1:]
             prediction.append(player.get_prediction())
         starting_player=num
-        for j in range(num):
+        for j in range(num+1):
             played_cards = []
             for i in range(len(self.players)):
                 played_cards.append(self.players[(starting_player+i)%len(self.players)].turn())
             win = self.winning_Card(played_cards)
-            winner = (starting_player + played_cards.index(win)) % len(self.players) -1
+            winner = (starting_player + played_cards.index(win)) % len(self.players)
+            self.players[winner].add_win()
             print('Cards: ', self.readableCardFormat(played_cards))
             print('Winning: ', self.readableCardFormat(win))
             print('Winner: ', winner)
             result[winner] = result[winner] + 1
             starting_player = winner
+
         print('Prediction: ', prediction)
         print('Result', result)
+        print('Result (from Player): ', [player.get_win() for player in self.players])
+        for player in self.players:
+            print('Wins: ',player.get_win(),', Cards: ',self.readableCardFormat(player.cards_temp))
         print('=============')
 
 
