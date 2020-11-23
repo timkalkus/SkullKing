@@ -6,11 +6,9 @@ import math
 class Game():
     def __init__(self,player_count=2):
         self.players = [Player() for i in range(player_count)]
-        for i in range(20):
+        for i in range(10):
             self.shuffle()
-            deck = self.cards[:random.randint(2,6)]
-            print('Deck: ',self.readableCardFormat(deck))
-            print('Winner: ',self.readableCardFormat(self.winning_Card(deck)))
+            self.game_round(i)
 
     def shuffle(self):
         self.cards = list(range(66))
@@ -49,6 +47,30 @@ class Game():
         if type ==5:
             return [0,0,27][value]
 
+    def game_round(self,num=0):
+        self.shuffle()
+        prediction = []
+        result = [0 for i in range(len(self.players))]
+        for player in self.players:
+            player.set_hand(self.cards[:num])
+            self.cards = self.cards[num:]
+            prediction.append(player.get_prediction())
+        starting_player=num
+        for j in range(num):
+            played_cards = []
+            for i in range(len(self.players)):
+                played_cards.append(self.players[(starting_player+i)%len(self.players)].turn())
+            win = self.winning_Card(played_cards)
+            winner = (starting_player + played_cards.index(win)) % len(self.players) -1
+            print('Cards: ', self.readableCardFormat(played_cards))
+            print('Winning: ', self.readableCardFormat(win))
+            print('Winner: ', winner)
+            result[winner] = result[winner] + 1
+            starting_player = winner
+        print('Prediction: ', prediction)
+        print('Result', result)
+        print('=============')
+
 
     def readableCardFormat(self,card):
         if isinstance(card,list):
@@ -64,4 +86,4 @@ class Game():
 
 
 
-Game()
+Game(5)
